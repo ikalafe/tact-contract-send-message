@@ -9,6 +9,10 @@ message Subtract {
 }
 // this message will cause our contract to do a complex math operation on the counter
 message MultiMath {
+    ops: Operations;
+}
+
+struct Operations {
     add: Int as uint32;
     subtract: Int as uint32;
     multiply: Int as uint32;
@@ -35,9 +39,9 @@ contract Messages with Deployable {
 
     // handler for the "MultiMath" message - this is a binary message that hold multiple input arguments
     receive(msg: MultiMath){
-        self.val += msg.add;
-        self.val -= msg.subtract;
-        self.val *= msg.multiply;
+        self.val += msg.ops.add;
+        self.val -= msg.ops.subtract;
+        self.val *= msg.ops.multiply;
     }
 
     // handler for "increment" textual message - this is a textual string message, these cannot cause
@@ -56,4 +60,11 @@ contract Messages with Deployable {
     }
 
     //
+    receive(msg: Slice){
+        // ..
+    }
+
+    get fun vlaue(): Int {
+        return self.val;
+    }
 }
